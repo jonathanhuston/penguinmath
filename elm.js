@@ -4310,23 +4310,32 @@ function _Browser_load(url)
 		}
 	}));
 }
-var author$project$PenguinMath$Stand = {$: 'Stand'};
-var author$project$PenguinMath$init = author$project$PenguinMath$Stand;
-var author$project$PenguinMath$Dance = {$: 'Dance'};
+var author$project$PenguinMath$Intro = {$: 'Intro'};
+var author$project$PenguinMath$init = author$project$PenguinMath$Intro;
+var author$project$PenguinMath$Dancing = {$: 'Dancing'};
+var author$project$PenguinMath$Quiz = {$: 'Quiz'};
 var author$project$PenguinMath$update = F2(
 	function (msg, model) {
-		if (model.$ === 'Stand') {
-			return author$project$PenguinMath$Dance;
-		} else {
-			return author$project$PenguinMath$Stand;
+		switch (msg.$) {
+			case 'Start':
+				return author$project$PenguinMath$Quiz;
+			case 'Next':
+				return author$project$PenguinMath$Quiz;
+			case 'Dance':
+				return author$project$PenguinMath$Dancing;
+			default:
+				return author$project$PenguinMath$Quiz;
 		}
 	});
-var author$project$PenguinMath$Switch = {$: 'Switch'};
-var elm$core$Basics$False = {$: 'False'};
-var elm$core$Basics$True = {$: 'True'};
+var author$project$PenguinMath$Dance = {$: 'Dance'};
+var author$project$PenguinMath$Next = {$: 'Next'};
+var author$project$PenguinMath$Start = {$: 'Start'};
+var author$project$PenguinMath$Stop = {$: 'Stop'};
 var elm$core$Basics$identity = function (x) {
 	return x;
 };
+var elm$core$Basics$False = {$: 'False'};
+var elm$core$Basics$True = {$: 'True'};
 var elm$core$Result$isOk = function (result) {
 	if (result.$ === 'Ok') {
 		return true;
@@ -4815,6 +4824,92 @@ var elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
 			return 3;
 	}
 };
+var elm$html$Html$button = _VirtualDom_node('button');
+var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
+var elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 'Normal', a: a};
+};
+var elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var elm$html$Html$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			elm$virtual_dom$VirtualDom$on,
+			event,
+			elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		elm$html$Html$Events$on,
+		'click',
+		elm$json$Json$Decode$succeed(msg));
+};
+var author$project$PenguinMath$displayButton = function (model) {
+	switch (model.$) {
+		case 'Intro':
+			return A2(
+				elm$html$Html$button,
+				_List_fromArray(
+					[
+						elm$html$Html$Events$onClick(author$project$PenguinMath$Start)
+					]),
+				_List_fromArray(
+					[
+						elm$html$Html$text('Start')
+					]));
+		case 'Quiz':
+			return A2(
+				elm$html$Html$button,
+				_List_fromArray(
+					[
+						elm$html$Html$Events$onClick(author$project$PenguinMath$Next)
+					]),
+				_List_fromArray(
+					[
+						elm$html$Html$text('Next')
+					]));
+		default:
+			return A2(
+				elm$html$Html$button,
+				_List_fromArray(
+					[
+						elm$html$Html$Events$onClick(author$project$PenguinMath$Stop)
+					]),
+				_List_fromArray(
+					[
+						elm$html$Html$text('Stop')
+					]));
+	}
+};
+var elm$html$Html$p = _VirtualDom_node('p');
+var author$project$PenguinMath$displayQuestion = function (model) {
+	switch (model.$) {
+		case 'Intro':
+			return A2(
+				elm$html$Html$p,
+				_List_Nil,
+				_List_fromArray(
+					[
+						elm$html$Html$text('Hi, I\'m Pengi the Penguin. Let\'s do some math. ')
+					]));
+		case 'Quiz':
+			return A2(
+				elm$html$Html$p,
+				_List_Nil,
+				_List_fromArray(
+					[
+						elm$html$Html$text('5 km and 350 m is how many meters?')
+					]));
+		default:
+			return A2(
+				elm$html$Html$p,
+				_List_Nil,
+				_List_fromArray(
+					[
+						elm$html$Html$text('Pengi is happy!!')
+					]));
+	}
+};
 var elm$html$Html$img = _VirtualDom_node('img');
 var elm$html$Html$video = _VirtualDom_node('video');
 var elm$json$Json$Encode$bool = _Json_wrap;
@@ -4849,55 +4944,39 @@ var elm$html$Html$Attributes$src = function (url) {
 		_VirtualDom_noJavaScriptOrHtmlUri(url));
 };
 var author$project$PenguinMath$viewPengi = function (model) {
-	if (model.$ === 'Stand') {
-		return A2(
-			elm$html$Html$img,
-			_List_fromArray(
-				[
-					elm$html$Html$Attributes$src('resources/pengi.png'),
-					elm$html$Html$Attributes$height(130)
-				]),
-			_List_Nil);
-	} else {
-		return A2(
-			elm$html$Html$video,
-			_List_fromArray(
-				[
-					elm$html$Html$Attributes$src('resources/pengi.mov'),
-					elm$html$Html$Attributes$height(150),
-					elm$html$Html$Attributes$autoplay(true),
-					elm$html$Html$Attributes$loop(true),
-					elm$html$Html$Attributes$controls(false)
-				]),
-			_List_Nil);
+	var pengiVid = A2(
+		elm$html$Html$video,
+		_List_fromArray(
+			[
+				elm$html$Html$Attributes$src('resources/pengi.mov'),
+				elm$html$Html$Attributes$height(150),
+				elm$html$Html$Attributes$autoplay(true),
+				elm$html$Html$Attributes$loop(true),
+				elm$html$Html$Attributes$controls(false)
+			]),
+		_List_Nil);
+	var pengiImg = A2(
+		elm$html$Html$img,
+		_List_fromArray(
+			[
+				elm$html$Html$Attributes$src('resources/pengi.png'),
+				elm$html$Html$Attributes$height(130)
+			]),
+		_List_Nil);
+	switch (model.$) {
+		case 'Intro':
+			return pengiImg;
+		case 'Quiz':
+			return pengiImg;
+		default:
+			return pengiVid;
 	}
 };
-var elm$html$Html$button = _VirtualDom_node('button');
 var elm$html$Html$div = _VirtualDom_node('div');
 var elm$html$Html$h1 = _VirtualDom_node('h1');
-var elm$html$Html$p = _VirtualDom_node('p');
 var elm$html$Html$section = _VirtualDom_node('section');
-var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
-var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
 var elm$html$Html$Attributes$class = elm$html$Html$Attributes$stringProperty('className');
 var elm$html$Html$Attributes$id = elm$html$Html$Attributes$stringProperty('id');
-var elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 'Normal', a: a};
-};
-var elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
-var elm$html$Html$Events$on = F2(
-	function (event, decoder) {
-		return A2(
-			elm$virtual_dom$VirtualDom$on,
-			event,
-			elm$virtual_dom$VirtualDom$Normal(decoder));
-	});
-var elm$html$Html$Events$onClick = function (msg) {
-	return A2(
-		elm$html$Html$Events$on,
-		'click',
-		elm$json$Json$Decode$succeed(msg));
-};
 var author$project$PenguinMath$view = function (model) {
 	return A2(
 		elm$html$Html$div,
@@ -4914,13 +4993,8 @@ var author$project$PenguinMath$view = function (model) {
 					[
 						elm$html$Html$text('Penguin Math')
 					])),
-				A2(
-				elm$html$Html$p,
-				_List_Nil,
-				_List_fromArray(
-					[
-						elm$html$Html$text('Hi, I\'m Pengi the Penguin. Let\'s do some math.')
-					])),
+				author$project$PenguinMath$displayQuestion(model),
+				author$project$PenguinMath$displayButton(model),
 				A2(
 				elm$html$Html$section,
 				_List_fromArray(
@@ -4934,7 +5008,8 @@ var author$project$PenguinMath$view = function (model) {
 						elm$html$Html$button,
 						_List_fromArray(
 							[
-								elm$html$Html$Events$onClick(author$project$PenguinMath$Switch)
+								elm$html$Html$Attributes$id('pengi'),
+								elm$html$Html$Events$onClick(author$project$PenguinMath$Dance)
 							]),
 						_List_fromArray(
 							[

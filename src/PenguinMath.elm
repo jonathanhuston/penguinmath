@@ -19,29 +19,34 @@ main =
 -- MODEL
 
 type Model
-    = Stand
-    | Dance
+    = Intro
+    | Quiz
+    | Dancing
 
 init: Model
 init = 
-    Stand
+    Intro
 
 
 -- UPDATE
 
 type Msg 
-    = Switch
+    = Start
+    | Next
+    | Dance
+    | Stop
 
 update : Msg -> Model -> Model
 update msg model =
     case msg of
-        Switch ->
-            case model of
-                Stand ->
-                    Dance
-
-                Dance ->
-                    Stand
+        Start ->
+            Quiz
+        Next ->
+            Quiz
+        Dance ->
+            Dancing
+        Stop ->
+            Quiz
 
 
 -- VIEW
@@ -50,29 +55,47 @@ view : Model -> Html Msg
 view model =
     div [ id "content" ]
         [ h1 [] [ text "Penguin Math" ]
-        , p [] [ text "Hi, I'm Pengi the Penguin. Let's do some math."]
+        , displayQuestion model
+        , displayButton model
         , section [ id "pengi" , class "container"]
             [ button 
-                [ onClick Switch ]
+                [ id "pengi", onClick Dance ]
                 [ viewPengi model ]
             ]
         ]
 
 
+displayButton : Model -> Html Msg
+displayButton model =
+    case model of 
+        Intro -> 
+            button [ onClick Start ] [ text "Start" ]
+        Quiz ->
+            button [ onClick Next ] [ text "Next" ]
+        Dancing ->
+            button [ onClick Stop ] [ text "Stop" ]
+
+
+displayQuestion : Model -> Html Msg
+displayQuestion model =
+    case model of
+        Intro ->
+            p [] [ text "Hi, I'm Pengi the Penguin. Let's do some math. "]
+        Quiz ->    
+            p [] [ text "5 km and 350 m is how many meters?" ]
+        Dancing ->
+            p [] [ text "Pengi is happy!!" ]
+
+
 viewPengi : Model -> Html Msg
 viewPengi model =
+    let pengiImg = img [ src "resources/pengi.png", height 130 ] []
+        pengiVid = video [ src "resources/pengi.mov", height 150, autoplay True, loop True, controls False ] []
+    in
     case model of 
-        Stand ->
-            img 
-                [ src "resources/pengi.png"
-                , height 130
-                ] []
-
-        Dance ->
-            video 
-                [ src "resources/pengi.mov"
-                , height 150
-                , autoplay True
-                , loop True
-                , controls False
-                ] []
+        Intro ->
+            pengiImg
+        Quiz ->
+            pengiImg
+        Dancing ->
+            pengiVid

@@ -4311,7 +4311,8 @@ function _Browser_load(url)
 	}));
 }
 var author$project$PenguinMath$Intro = {$: 'Intro'};
-var author$project$PenguinMath$init = {myAnswer: '', page: author$project$PenguinMath$Intro, right: 0, total: 10, wrong: 0};
+var elm$core$Basics$False = {$: 'False'};
+var author$project$PenguinMath$init = {goal: 8, lastWrong: false, myAnswer: '', page: author$project$PenguinMath$Intro, right: 0, total: 10, wrong: 0};
 var author$project$PenguinMath$AskQuestion = {$: 'AskQuestion'};
 var author$project$PenguinMath$HappyPengi = {$: 'HappyPengi'};
 var author$project$PenguinMath$SadPengi = {$: 'SadPengi'};
@@ -4401,7 +4402,7 @@ var elm$core$Basics$lt = _Utils_lt;
 var author$project$PenguinMath$getNextPage = function (model) {
 	return (_Utils_cmp(model.right + model.wrong, model.total) < 0) ? _Utils_update(
 		model,
-		{myAnswer: '', page: author$project$PenguinMath$AskQuestion}) : ((model.right >= 8) ? _Utils_update(
+		{myAnswer: '', page: author$project$PenguinMath$AskQuestion}) : ((_Utils_cmp(model.right, model.goal) > -1) ? _Utils_update(
 		model,
 		{page: author$project$PenguinMath$HappyPengi}) : _Utils_update(
 		model,
@@ -4409,13 +4410,18 @@ var author$project$PenguinMath$getNextPage = function (model) {
 };
 var author$project$PenguinMath$RightAnswer = {$: 'RightAnswer'};
 var author$project$PenguinMath$WrongAnswer = {$: 'WrongAnswer'};
+var elm$core$Basics$True = {$: 'True'};
 var elm$core$Basics$eq = _Utils_equal;
 var author$project$PenguinMath$rightOrWrong = function (model) {
-	return (model.myAnswer === '5350') ? _Utils_update(
+	return (model.myAnswer === '5350') ? (model.lastWrong ? _Utils_update(
 		model,
-		{page: author$project$PenguinMath$RightAnswer, right: model.right + 1}) : _Utils_update(
+		{lastWrong: false, page: author$project$PenguinMath$RightAnswer}) : _Utils_update(
 		model,
-		{page: author$project$PenguinMath$WrongAnswer, wrong: model.wrong + 1});
+		{lastWrong: false, page: author$project$PenguinMath$RightAnswer, right: model.right + 1})) : (model.lastWrong ? _Utils_update(
+		model,
+		{page: author$project$PenguinMath$WrongAnswer}) : _Utils_update(
+		model,
+		{lastWrong: true, page: author$project$PenguinMath$WrongAnswer, wrong: model.wrong + 1}));
 };
 var author$project$PenguinMath$update = F2(
 	function (msg, model) {
@@ -4436,7 +4442,7 @@ var author$project$PenguinMath$update = F2(
 			default:
 				return _Utils_update(
 					model,
-					{myAnswer: '', page: author$project$PenguinMath$Intro, right: 0, wrong: 0});
+					{lastWrong: false, myAnswer: '', page: author$project$PenguinMath$Intro, right: 0, wrong: 0});
 		}
 	});
 var author$project$PenguinMath$Enter = {$: 'Enter'};
@@ -4449,8 +4455,6 @@ var author$project$PenguinMath$StartOver = {$: 'StartOver'};
 var elm$core$Basics$identity = function (x) {
 	return x;
 };
-var elm$core$Basics$False = {$: 'False'};
-var elm$core$Basics$True = {$: 'True'};
 var elm$core$Result$isOk = function (result) {
 	if (result.$ === 'Ok') {
 		return true;
@@ -5086,7 +5090,7 @@ var author$project$PenguinMath$displayQuestion = function (model) {
 				_List_Nil,
 				_List_fromArray(
 					[
-						elm$html$Html$text('That is correct!')
+						elm$html$Html$text('That\'s the right answer!')
 					]));
 		case 'WrongAnswer':
 			return A2(
@@ -5094,7 +5098,7 @@ var author$project$PenguinMath$displayQuestion = function (model) {
 				_List_Nil,
 				_List_fromArray(
 					[
-						elm$html$Html$text('That is incorrect.')
+						elm$html$Html$text('Oops. Try again.')
 					]));
 		case 'SadPengi':
 			return A2(
@@ -5103,7 +5107,7 @@ var author$project$PenguinMath$displayQuestion = function (model) {
 				_List_fromArray(
 					[
 						elm$html$Html$text(
-						'Sadly, you only answered ' + (elm$core$String$fromInt(model.right) + ' correctly.'))
+						'You answered ' + (elm$core$String$fromInt(model.right) + ' correctly. Pengi is a bit sad.'))
 					]));
 		default:
 			return A2(
@@ -5112,7 +5116,7 @@ var author$project$PenguinMath$displayQuestion = function (model) {
 				_List_fromArray(
 					[
 						elm$html$Html$text(
-						'Yay! You answered ' + (elm$core$String$fromInt(model.right) + ' correctly!'))
+						'Yay! You answered ' + (elm$core$String$fromInt(model.right) + ' correctly! Pengi is very happy!'))
 					]));
 	}
 };
@@ -5226,6 +5230,14 @@ var author$project$PenguinMath$view = function (model) {
 					[
 						elm$html$Html$text(
 						'Wrong: ' + elm$core$String$fromInt(model.wrong))
+					])),
+				A2(
+				elm$html$Html$p,
+				_List_Nil,
+				_List_fromArray(
+					[
+						elm$html$Html$text(
+						'Questions left: ' + elm$core$String$fromInt((model.total - model.right) - model.wrong))
 					]))
 			]));
 };

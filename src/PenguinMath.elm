@@ -30,18 +30,22 @@ type Page
 type alias Model =
     { page : Page
     , total : Int
+    , goal : Int
     , right : Int
     , wrong : Int
-    , myAnswer : String 
+    , myAnswer : String
+    , lastWrong : Bool
     }
 
 init: Model
 init = 
     { page = Intro 
     , total = 10
+    , goal = 8
     , right = 0
     , wrong = 0
-    , myAnswer = "" 
+    , myAnswer = ""
+    , lastWrong = False
     }
 
 
@@ -69,18 +73,27 @@ update msg model =
             { model | page = Intro
             , right = 0
             , wrong = 0
-            , myAnswer = "" 
+            , myAnswer = ""
+            , lastWrong = False
             }
 
 
 rightOrWrong : Model -> Model
 rightOrWrong model =
     if model.myAnswer == "5350" then 
-        { model | page = RightAnswer
-        , right = model.right + 1 } 
-    else 
-        { model | page = WrongAnswer
-        , wrong = model.wrong + 1 }
+        if model.lastWrong then
+            { model | page = RightAnswer
+            , lastWrong = False } 
+        else
+            { model | page = RightAnswer
+            , right = model.right + 1
+            , lastWrong = False } 
+    else if model.lastWrong then
+            { model | page = WrongAnswer }
+        else
+            { model | page = WrongAnswer
+            , wrong = model.wrong + 1
+            , lastWrong = True }
 
 getNextPage : Model -> Model
 getNextPage model =
@@ -88,10 +101,11 @@ getNextPage model =
         { model | page = AskQuestion
         , myAnswer = ""
         }
-    else if model.right >= 8 then
+    else if model.right >= model.goal then
         { model | page = HappyPengi }
     else
         { model | page = SadPengi }
+
 
 -- VIEW
 
@@ -105,6 +119,7 @@ view model =
             [ viewPengi model ]
         , p [] [ text ("Right: " ++ String.fromInt model.right) ]
         , p [] [ text ("Wrong: " ++ String.fromInt model.wrong) ]
+        , p [] [ text ("Questions left: " ++ String.fromInt (model.total - model.right - model.wrong)) ]
         ]
 
 
@@ -133,13 +148,13 @@ displayQuestion model =
         AskQuestion ->    
             p [] [ text "5 km and 350 m is how many meters?" ]
         RightAnswer ->
-            p [] [ text "That is correct!" ]
+            p [] [ text "That's the right answer!" ]
         WrongAnswer ->
-            p [] [ text "That is incorrect."]
+            p [] [ text "Oops. Try again." ]
         SadPengi ->
-            p [] [ text ("Sadly, you only answered " ++ String.fromInt model.right ++ " correctly.") ]
+            p [] [ text ("You answered " ++ String.fromInt model.right ++ " correctly. Pengi is a bit sad.") ]
         HappyPengi ->
-            p [] [ text ("Yay! You answered " ++ String.fromInt model.right ++ " correctly!") ]
+            p [] [ text ("Yay! You answered " ++ String.fromInt model.right ++ " correctly! Pengi is very happy!") ]
 
 
 viewPengi : Model -> Html Msg

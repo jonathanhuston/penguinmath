@@ -1,6 +1,6 @@
 quiz = {
         "name": "measures",
-        "title": "Measures (m, l, g)",
+        "title": "Measures (length, volume, weight)",
         "total": 3,
         "goal": 2,
         "questions" : [
@@ -14,3 +14,6 @@ quiz = {
             "10001"
         ]
     }
+
+def quiz():
+    return quiz

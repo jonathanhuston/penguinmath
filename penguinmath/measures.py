@@ -12,24 +12,27 @@ def get_qa():
 
     l = len(measure_category)
     ti = random.randint(0, l-2)
-    s1i = random.randint(ti, l-1)
-    s2i = random.randint(ti, l-1)
-    if s1i < s2i:
-        temp = s1i
-        s1i = s2i
-        s2i = temp
-
     tm = measure_category[ti]
     tv = value_category[ti]
-    s1m = measure_category[s1i]
-    s1v = value_category[s1i]
-    s2m = measure_category[s2i]
-    s2v = value_category[s2i]
+
+    while True:
+        s1i = random.randint(ti, l-1)
+        s1m = measure_category[s1i]
+        s1v = value_category[s1i]
+        if s1v / tv <= 1000:
+            break
+
+    while True:
+        s2i = random.randint(ti, l-1)
+        s2m = measure_category[s2i]
+        s2v = value_category[s2i]
+        if s2v / tv <= 1000:
+            break
 
     f1 = random.randint(0, 1000)
     f2 = random.randint(0, 1000)
     
-    q = "How many {} are {} {} and {} {}?".format(tm, str(f1), s1m, str(f2), s2m)
+    q = "{} {} + {} {} = how many {}?".format(str(f1), s1m, str(f2), s2m, tm)
     a = str(round((f1 * s1v + f2 * s2v) / tv))
 
     return q, a

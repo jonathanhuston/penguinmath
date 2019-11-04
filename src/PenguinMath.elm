@@ -298,7 +298,7 @@ displayButton model =
 
 displayDropdown : Model -> List (Html Msg)
 displayDropdown model =
-   List.map (\qz -> option [ value qz.name] [ text qz.title ]) model.quizHeaders
+   List.map (\qz -> option [ value qz.name ] [ text qz.title ]) model.quizHeaders
 
 
 viewPengi : Model -> Html Msg

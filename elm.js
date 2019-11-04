@@ -5977,7 +5977,6 @@ var elm$core$Platform$Sub$none = elm$core$Platform$Sub$batch(_List_Nil);
 var author$project$PenguinMath$subscriptions = function (model) {
 	return elm$core$Platform$Sub$none;
 };
-var author$project$PenguinMath$AskQuestion = {$: 'AskQuestion'};
 var author$project$PenguinMath$LoadQuiz = function (a) {
 	return {$: 'LoadQuiz', a: a};
 };
@@ -6020,6 +6019,7 @@ var author$project$PenguinMath$fetchQuiz = F2(
 				url: author$project$PenguinMath$baseUrl + ('quizzes/' + name)
 			});
 	});
+var author$project$PenguinMath$AskQuestion = {$: 'AskQuestion'};
 var author$project$PenguinMath$HappyPengi = {$: 'HappyPengi'};
 var author$project$PenguinMath$SadPengi = {$: 'SadPengi'};
 var elm$core$Basics$ge = _Utils_ge;
@@ -6100,12 +6100,6 @@ var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
 var author$project$PenguinMath$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
-			case 'Start':
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{page: author$project$PenguinMath$AskQuestion}),
-					elm$core$Platform$Cmd$none);
 			case 'Input':
 				var myAnswer = msg.a;
 				return _Utils_Tuple2(

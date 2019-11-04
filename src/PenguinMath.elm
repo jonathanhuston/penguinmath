@@ -133,8 +133,7 @@ init () =
 -- UPDATE
 
 type Msg 
-    = Start
-    | Input String
+    = Input String
     | Enter
     | Next
     | StartOver
@@ -146,10 +145,6 @@ type Msg
 update : Msg -> Model -> ( Model, Cmd Msg)
 update msg model =
     case msg of
-        Start ->
-            ( { model | page = AskQuestion }
-            , Cmd.none
-            )
         Input myAnswer ->
             ( { model | myAnswer = myAnswer }
             , Cmd.none

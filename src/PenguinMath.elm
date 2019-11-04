@@ -10,7 +10,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
 import Html.Events.Extra exposing (onEnter)
 import Http
-import Json.Decode exposing (Decoder, array, int, string, succeed)
+import Json.Decode exposing (Decoder, at, array, list, int, string, succeed)
 import Json.Decode.Pipeline exposing (required)
 
 
@@ -30,6 +30,11 @@ main =
 -- MODEL
 
 
+type alias QuizHeader = 
+    { name : String
+    , title : String
+    }
+
 type alias Quiz =
     { name : String
     , title : String        
@@ -47,9 +52,9 @@ type Page
     | SadPengi
     | HappyPengi
 
-
 type alias Model =
-    { quiz : Quiz
+    { quizHeaders : List QuizHeader
+    , quiz : Quiz
     , page : Page
     , right : Int
     , wrong : Int
@@ -57,6 +62,18 @@ type alias Model =
     , myAnswer : String
     , lastWrong : Bool
     }
+
+
+headerDecoder : Decoder QuizHeader
+headerDecoder =
+    succeed QuizHeader
+        |> required "name" string
+        |> required "title" string
+
+
+headersDecoder : Decoder (List QuizHeader)
+headersDecoder =
+    at ["quizzes"] (list headerDecoder)
 
 
 quizDecoder : Decoder Quiz
@@ -75,6 +92,7 @@ baseUrl =
 --    "https://slatescript.pythonanywhere.com/penguinmath/api/"
     "http://localhost:5000/penguinmath/api/"
 
+
 initialModel : Model
 initialModel = 
     let
@@ -87,7 +105,8 @@ initialModel =
             , answers = Array.fromList []
             }
     in
-    { quiz = emptyQuiz
+    { quizHeaders = []
+    , quiz = emptyQuiz
     , page = Intro 
     , right = 0
     , wrong = 0
@@ -97,17 +116,17 @@ initialModel =
     }
 
 
-fetchQuiz : Cmd Msg
-fetchQuiz =
+fetchQuizHeaders : Cmd Msg
+fetchQuizHeaders =
     Http.get
-        { url = baseUrl ++ "quiz"
-        , expect = Http.expectJson LoadQuiz quizDecoder
+        { url = baseUrl ++ "quizzes"
+        , expect = Http.expectJson LoadQuizHeaders headersDecoder
         }
 
 
 init : () -> ( Model, Cmd Msg )
 init () =
-    ( initialModel, fetchQuiz )
+    ( initialModel, fetchQuizHeaders )
 
 
 
@@ -119,6 +138,8 @@ type Msg
     | Enter
     | Next
     | StartOver
+    | LoadQuizHeaders (Result Http.Error (List QuizHeader))
+    | SelectQuiz String
     | LoadQuiz (Result Http.Error Quiz)
 
 
@@ -149,11 +170,24 @@ update msg model =
               , myAnswer = ""
               , lastWrong = False
               }
+            , fetchQuizHeaders
+            )
+        LoadQuizHeaders (Ok quizHeaders) ->
+            ( { model | quizHeaders = quizHeaders }
+            , Cmd.none 
+            )
+        LoadQuizHeaders (Err _) ->
+            ( model
             , Cmd.none
+            )
+        SelectQuiz quizName ->
+            ( model
+            , fetchQuiz model quizName
             )
         LoadQuiz (Ok quiz) ->
             ( { model | quiz = quiz }
-            , Cmd.none )
+            , Cmd.none 
+            )
         LoadQuiz (Err _) ->
             ( model
             , Cmd.none
@@ -197,6 +231,13 @@ getNextPage model =
     else
         { model | page = SadPengi }
 
+
+fetchQuiz : Model -> String -> Cmd Msg
+fetchQuiz model name =
+    Http.get
+        { url = baseUrl ++ "quizzes/" ++ name
+        , expect = Http.expectJson LoadQuiz quizDecoder
+        }
 
 
 -- VIEW
@@ -244,8 +285,8 @@ displayButton model =
     case model.page of 
         Intro -> 
             section [ id "select quiz" ]
-                [ select [ class "dropbtn", name "quizzes" ]
-                    [ option [ value model.quiz.name] [ text model.quiz.title] ]
+                [ select [ class "dropbtn", name "quizzes", onInput SelectQuiz ]
+                    (displayDropdown model)
                 , button [ onClick Next ] [ text "Go" ]
                 ]
         AskQuestion ->
@@ -258,6 +299,11 @@ displayButton model =
             button [ onClick StartOver ] [ text "Start over" ]
         HappyPengi ->
             button [ onClick StartOver ] [ text "Start over" ]
+
+
+displayDropdown : Model -> List (Html Msg)
+displayDropdown model =
+   List.map (\qz -> option [ value qz.name] [ text qz.title ]) model.quizHeaders
 
 
 viewPengi : Model -> Html Msg

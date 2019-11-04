@@ -10,7 +10,7 @@ CORS(app)
 @app.route('/penguinmath/api/quizzes', methods=['GET'])
 def get_quizzes():
     headers = [{k:quiz[k] for k in ("name", "title")} for quiz in generate.quizzes]
-    return jsonify({"quizzes:": headers})
+    return jsonify({"quizzes": headers})
 
 
 @app.route('/penguinmath/api/quizzes/<string:quizname>', methods=['GET'])

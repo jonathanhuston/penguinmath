@@ -4522,8 +4522,8 @@ function _Browser_load(url)
 		}
 	}));
 }
-var author$project$PenguinMath$LoadQuiz = function (a) {
-	return {$: 'LoadQuiz', a: a};
+var author$project$PenguinMath$LoadQuizHeaders = function (a) {
+	return {$: 'LoadQuizHeaders', a: a};
 };
 var author$project$PenguinMath$baseUrl = 'http://localhost:5000/penguinmath/api/';
 var elm$core$Basics$apR = F2(
@@ -5011,39 +5011,86 @@ var NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required = F3(
 			A2(elm$json$Json$Decode$field, key, valDecoder),
 			decoder);
 	});
-var author$project$PenguinMath$Quiz = F6(
-	function (name, title, total, goal, questions, answers) {
-		return {answers: answers, goal: goal, name: name, questions: questions, title: title, total: total};
+var author$project$PenguinMath$QuizHeader = F2(
+	function (name, title) {
+		return {name: name, title: title};
 	});
-var elm$json$Json$Decode$array = _Json_decodeArray;
-var elm$json$Json$Decode$int = _Json_decodeInt;
 var elm$json$Json$Decode$string = _Json_decodeString;
 var elm$json$Json$Decode$succeed = _Json_succeed;
-var author$project$PenguinMath$quizDecoder = A3(
+var author$project$PenguinMath$headerDecoder = A3(
 	NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-	'answers',
-	elm$json$Json$Decode$array(elm$json$Json$Decode$string),
+	'title',
+	elm$json$Json$Decode$string,
 	A3(
 		NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-		'questions',
-		elm$json$Json$Decode$array(elm$json$Json$Decode$string),
-		A3(
-			NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-			'goal',
-			elm$json$Json$Decode$int,
-			A3(
-				NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-				'total',
-				elm$json$Json$Decode$int,
-				A3(
-					NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-					'title',
-					elm$json$Json$Decode$string,
-					A3(
-						NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-						'name',
-						elm$json$Json$Decode$string,
-						elm$json$Json$Decode$succeed(author$project$PenguinMath$Quiz)))))));
+		'name',
+		elm$json$Json$Decode$string,
+		elm$json$Json$Decode$succeed(author$project$PenguinMath$QuizHeader)));
+var elm$core$List$foldrHelper = F4(
+	function (fn, acc, ctr, ls) {
+		if (!ls.b) {
+			return acc;
+		} else {
+			var a = ls.a;
+			var r1 = ls.b;
+			if (!r1.b) {
+				return A2(fn, a, acc);
+			} else {
+				var b = r1.a;
+				var r2 = r1.b;
+				if (!r2.b) {
+					return A2(
+						fn,
+						a,
+						A2(fn, b, acc));
+				} else {
+					var c = r2.a;
+					var r3 = r2.b;
+					if (!r3.b) {
+						return A2(
+							fn,
+							a,
+							A2(
+								fn,
+								b,
+								A2(fn, c, acc)));
+					} else {
+						var d = r3.a;
+						var r4 = r3.b;
+						var res = (ctr > 500) ? A3(
+							elm$core$List$foldl,
+							fn,
+							acc,
+							elm$core$List$reverse(r4)) : A4(elm$core$List$foldrHelper, fn, acc, ctr + 1, r4);
+						return A2(
+							fn,
+							a,
+							A2(
+								fn,
+								b,
+								A2(
+									fn,
+									c,
+									A2(fn, d, res))));
+					}
+				}
+			}
+		}
+	});
+var elm$core$List$foldr = F3(
+	function (fn, acc, ls) {
+		return A4(elm$core$List$foldrHelper, fn, acc, 0, ls);
+	});
+var elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3(elm$core$List$foldr, elm$json$Json$Decode$field, decoder, fields);
+	});
+var elm$json$Json$Decode$list = _Json_decodeList;
+var author$project$PenguinMath$headersDecoder = A2(
+	elm$json$Json$Decode$at,
+	_List_fromArray(
+		['quizzes']),
+	elm$json$Json$Decode$list(author$project$PenguinMath$headerDecoder));
 var elm$core$Result$mapError = F2(
 	function (f, result) {
 		if (result.$ === 'Ok') {
@@ -5757,61 +5804,6 @@ var elm$http$Http$onEffects = F4(
 			},
 			A3(elm$http$Http$updateReqs, router, cmds, state.reqs));
 	});
-var elm$core$List$foldrHelper = F4(
-	function (fn, acc, ctr, ls) {
-		if (!ls.b) {
-			return acc;
-		} else {
-			var a = ls.a;
-			var r1 = ls.b;
-			if (!r1.b) {
-				return A2(fn, a, acc);
-			} else {
-				var b = r1.a;
-				var r2 = r1.b;
-				if (!r2.b) {
-					return A2(
-						fn,
-						a,
-						A2(fn, b, acc));
-				} else {
-					var c = r2.a;
-					var r3 = r2.b;
-					if (!r3.b) {
-						return A2(
-							fn,
-							a,
-							A2(
-								fn,
-								b,
-								A2(fn, c, acc)));
-					} else {
-						var d = r3.a;
-						var r4 = r3.b;
-						var res = (ctr > 500) ? A3(
-							elm$core$List$foldl,
-							fn,
-							acc,
-							elm$core$List$reverse(r4)) : A4(elm$core$List$foldrHelper, fn, acc, ctr + 1, r4);
-						return A2(
-							fn,
-							a,
-							A2(
-								fn,
-								b,
-								A2(
-									fn,
-									c,
-									A2(fn, d, res))));
-					}
-				}
-			}
-		}
-	});
-var elm$core$List$foldr = F3(
-	function (fn, acc, ls) {
-		return A4(elm$core$List$foldrHelper, fn, acc, 0, ls);
-	});
 var elm$core$List$maybeCons = F3(
 	function (f, mx, xs) {
 		var _n0 = f(mx);
@@ -5925,10 +5917,10 @@ var elm$http$Http$get = function (r) {
 	return elm$http$Http$request(
 		{body: elm$http$Http$emptyBody, expect: r.expect, headers: _List_Nil, method: 'GET', timeout: elm$core$Maybe$Nothing, tracker: elm$core$Maybe$Nothing, url: r.url});
 };
-var author$project$PenguinMath$fetchQuiz = elm$http$Http$get(
+var author$project$PenguinMath$fetchQuizHeaders = elm$http$Http$get(
 	{
-		expect: A2(elm$http$Http$expectJson, author$project$PenguinMath$LoadQuiz, author$project$PenguinMath$quizDecoder),
-		url: author$project$PenguinMath$baseUrl + 'quiz'
+		expect: A2(elm$http$Http$expectJson, author$project$PenguinMath$LoadQuizHeaders, author$project$PenguinMath$headersDecoder),
+		url: author$project$PenguinMath$baseUrl + 'quizzes'
 	});
 var author$project$PenguinMath$Intro = {$: 'Intro'};
 var elm$core$Array$fromListHelp = F3(
@@ -5975,10 +5967,10 @@ var author$project$PenguinMath$initialModel = function () {
 		title: '',
 		total: 0
 	};
-	return {count: 0, lastWrong: false, myAnswer: '', page: author$project$PenguinMath$Intro, quiz: emptyQuiz, right: 0, wrong: 0};
+	return {count: 0, lastWrong: false, myAnswer: '', page: author$project$PenguinMath$Intro, quiz: emptyQuiz, quizHeaders: _List_Nil, right: 0, wrong: 0};
 }();
 var author$project$PenguinMath$init = function (_n0) {
-	return _Utils_Tuple2(author$project$PenguinMath$initialModel, author$project$PenguinMath$fetchQuiz);
+	return _Utils_Tuple2(author$project$PenguinMath$initialModel, author$project$PenguinMath$fetchQuizHeaders);
 };
 var elm$core$Platform$Sub$batch = _Platform_batch;
 var elm$core$Platform$Sub$none = elm$core$Platform$Sub$batch(_List_Nil);
@@ -5986,6 +5978,48 @@ var author$project$PenguinMath$subscriptions = function (model) {
 	return elm$core$Platform$Sub$none;
 };
 var author$project$PenguinMath$AskQuestion = {$: 'AskQuestion'};
+var author$project$PenguinMath$LoadQuiz = function (a) {
+	return {$: 'LoadQuiz', a: a};
+};
+var author$project$PenguinMath$Quiz = F6(
+	function (name, title, total, goal, questions, answers) {
+		return {answers: answers, goal: goal, name: name, questions: questions, title: title, total: total};
+	});
+var elm$json$Json$Decode$array = _Json_decodeArray;
+var elm$json$Json$Decode$int = _Json_decodeInt;
+var author$project$PenguinMath$quizDecoder = A3(
+	NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+	'answers',
+	elm$json$Json$Decode$array(elm$json$Json$Decode$string),
+	A3(
+		NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+		'questions',
+		elm$json$Json$Decode$array(elm$json$Json$Decode$string),
+		A3(
+			NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+			'goal',
+			elm$json$Json$Decode$int,
+			A3(
+				NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+				'total',
+				elm$json$Json$Decode$int,
+				A3(
+					NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+					'title',
+					elm$json$Json$Decode$string,
+					A3(
+						NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+						'name',
+						elm$json$Json$Decode$string,
+						elm$json$Json$Decode$succeed(author$project$PenguinMath$Quiz)))))));
+var author$project$PenguinMath$fetchQuiz = F2(
+	function (model, name) {
+		return elm$http$Http$get(
+			{
+				expect: A2(elm$http$Http$expectJson, author$project$PenguinMath$LoadQuiz, author$project$PenguinMath$quizDecoder),
+				url: author$project$PenguinMath$baseUrl + ('quizzes/' + name)
+			});
+	});
 var author$project$PenguinMath$HappyPengi = {$: 'HappyPengi'};
 var author$project$PenguinMath$SadPengi = {$: 'SadPengi'};
 var elm$core$Basics$ge = _Utils_ge;
@@ -6092,7 +6126,23 @@ var author$project$PenguinMath$update = F2(
 					_Utils_update(
 						model,
 						{count: 0, lastWrong: false, myAnswer: '', page: author$project$PenguinMath$Intro, right: 0, wrong: 0}),
-					elm$core$Platform$Cmd$none);
+					author$project$PenguinMath$fetchQuizHeaders);
+			case 'LoadQuizHeaders':
+				if (msg.a.$ === 'Ok') {
+					var quizHeaders = msg.a.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{quizHeaders: quizHeaders}),
+						elm$core$Platform$Cmd$none);
+				} else {
+					return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
+				}
+			case 'SelectQuiz':
+				var quizName = msg.a;
+				return _Utils_Tuple2(
+					model,
+					A2(author$project$PenguinMath$fetchQuiz, model, quizName));
 			default:
 				if (msg.a.$ === 'Ok') {
 					var quiz = msg.a.a;
@@ -6111,7 +6161,24 @@ var author$project$PenguinMath$Input = function (a) {
 	return {$: 'Input', a: a};
 };
 var author$project$PenguinMath$Next = {$: 'Next'};
+var author$project$PenguinMath$SelectQuiz = function (a) {
+	return {$: 'SelectQuiz', a: a};
+};
 var author$project$PenguinMath$StartOver = {$: 'StartOver'};
+var elm$core$List$map = F2(
+	function (f, xs) {
+		return A3(
+			elm$core$List$foldr,
+			F2(
+				function (x, acc) {
+					return A2(
+						elm$core$List$cons,
+						f(x),
+						acc);
+				}),
+			_List_Nil,
+			xs);
+	});
 var elm$json$Json$Decode$map = _Json_map1;
 var elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
 	switch (handler.$) {
@@ -6125,11 +6192,7 @@ var elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
 			return 3;
 	}
 };
-var elm$html$Html$button = _VirtualDom_node('button');
-var elm$html$Html$input = _VirtualDom_node('input');
 var elm$html$Html$option = _VirtualDom_node('option');
-var elm$html$Html$section = _VirtualDom_node('section');
-var elm$html$Html$select = _VirtualDom_node('select');
 var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
 var elm$json$Json$Encode$string = _Json_wrap;
@@ -6140,10 +6203,31 @@ var elm$html$Html$Attributes$stringProperty = F2(
 			key,
 			elm$json$Json$Encode$string(string));
 	});
+var elm$html$Html$Attributes$value = elm$html$Html$Attributes$stringProperty('value');
+var author$project$PenguinMath$displayDropdown = function (model) {
+	return A2(
+		elm$core$List$map,
+		function (qz) {
+			return A2(
+				elm$html$Html$option,
+				_List_fromArray(
+					[
+						elm$html$Html$Attributes$value(qz.name)
+					]),
+				_List_fromArray(
+					[
+						elm$html$Html$text(qz.title)
+					]));
+		},
+		model.quizHeaders);
+};
+var elm$html$Html$button = _VirtualDom_node('button');
+var elm$html$Html$input = _VirtualDom_node('input');
+var elm$html$Html$section = _VirtualDom_node('section');
+var elm$html$Html$select = _VirtualDom_node('select');
 var elm$html$Html$Attributes$class = elm$html$Html$Attributes$stringProperty('className');
 var elm$html$Html$Attributes$id = elm$html$Html$Attributes$stringProperty('id');
 var elm$html$Html$Attributes$name = elm$html$Html$Attributes$stringProperty('name');
-var elm$html$Html$Attributes$value = elm$html$Html$Attributes$stringProperty('value');
 var elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 'Normal', a: a};
 };
@@ -6173,10 +6257,6 @@ var elm$html$Html$Events$stopPropagationOn = F2(
 			elm$virtual_dom$VirtualDom$on,
 			event,
 			elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
-	});
-var elm$json$Json$Decode$at = F2(
-	function (fields, decoder) {
-		return A3(elm$core$List$foldr, elm$json$Json$Decode$field, decoder, fields);
 	});
 var elm$html$Html$Events$targetValue = A2(
 	elm$json$Json$Decode$at,
@@ -6224,21 +6304,10 @@ var author$project$PenguinMath$displayButton = function (model) {
 						_List_fromArray(
 							[
 								elm$html$Html$Attributes$class('dropbtn'),
-								elm$html$Html$Attributes$name('quizzes')
+								elm$html$Html$Attributes$name('quizzes'),
+								elm$html$Html$Events$onInput(author$project$PenguinMath$SelectQuiz)
 							]),
-						_List_fromArray(
-							[
-								A2(
-								elm$html$Html$option,
-								_List_fromArray(
-									[
-										elm$html$Html$Attributes$value(model.quiz.name)
-									]),
-								_List_fromArray(
-									[
-										elm$html$Html$text(model.quiz.title)
-									]))
-							])),
+						author$project$PenguinMath$displayDropdown(model)),
 						A2(
 						elm$html$Html$button,
 						_List_fromArray(
@@ -6510,20 +6579,6 @@ var elm$core$Task$Perform = function (a) {
 	return {$: 'Perform', a: a};
 };
 var elm$core$Task$init = elm$core$Task$succeed(_Utils_Tuple0);
-var elm$core$List$map = F2(
-	function (f, xs) {
-		return A3(
-			elm$core$List$foldr,
-			F2(
-				function (x, acc) {
-					return A2(
-						elm$core$List$cons,
-						f(x),
-						acc);
-				}),
-			_List_Nil,
-			xs);
-	});
 var elm$core$Task$map = F2(
 	function (func, taskA) {
 		return A2(

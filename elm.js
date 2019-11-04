@@ -6389,7 +6389,7 @@ var author$project$PenguinMath$displayCaption = function (model) {
 				_List_Nil,
 				_List_fromArray(
 					[
-						elm$html$Html$text('Hi, I\'m Pengi the Penguin. Let\'s do some math. ')
+						elm$html$Html$text('Hi, I\'m Pengi the Penguin. First, choose a quiz. ')
 					]));
 		case 'AskQuestion':
 			return A2(
@@ -6433,6 +6433,22 @@ var author$project$PenguinMath$displayCaption = function (model) {
 					]));
 	}
 };
+var elm$html$Html$h2 = _VirtualDom_node('h2');
+var author$project$PenguinMath$displayHeader = function (model) {
+	return _Utils_eq(model.page, author$project$PenguinMath$Intro) ? A2(
+		elm$html$Html$h2,
+		_List_Nil,
+		_List_fromArray(
+			[
+				elm$html$Html$text('(and other quizzes)')
+			])) : A2(
+		elm$html$Html$h2,
+		_List_Nil,
+		_List_fromArray(
+			[
+				elm$html$Html$text(model.quiz.title)
+			]));
+};
 var elm$html$Html$img = _VirtualDom_node('img');
 var elm$html$Html$video = _VirtualDom_node('video');
 var elm$json$Json$Encode$bool = _Json_wrap;
@@ -6458,7 +6474,7 @@ var elm$html$Html$Attributes$src = function (url) {
 		'src',
 		_VirtualDom_noJavaScriptOrHtmlUri(url));
 };
-var author$project$PenguinMath$viewPengi = function (model) {
+var author$project$PenguinMath$displayPengi = function (model) {
 	var pengiVid = A2(
 		elm$html$Html$video,
 		_List_fromArray(
@@ -6512,6 +6528,7 @@ var author$project$PenguinMath$view = function (model) {
 					[
 						elm$html$Html$text('Penguin Math')
 					])),
+				author$project$PenguinMath$displayHeader(model),
 				author$project$PenguinMath$displayCaption(model),
 				author$project$PenguinMath$displayButton(model),
 				A2(
@@ -6523,7 +6540,7 @@ var author$project$PenguinMath$view = function (model) {
 					]),
 				_List_fromArray(
 					[
-						author$project$PenguinMath$viewPengi(model)
+						author$project$PenguinMath$displayPengi(model)
 					])),
 				A2(
 				elm$html$Html$p,

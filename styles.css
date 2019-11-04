@@ -22,10 +22,14 @@ body {
     padding-top: 40px
 }
 
-img {
-  margin-left: 7.5px;
-  margin-top: 7.5px;
-  margin-bottom: 13.3px;
+h1 {
+  font-weight: bold;
+}
+
+h2 {
+  color: #898ec1;
+  font-weight: bold;
+  font-size: 18px
 }
 
 .dropbtn {
@@ -48,3 +52,8 @@ input {
   margin-top: 6.5px;
 }
 
+img {
+  margin-left: 7.5px;
+  margin-top: 7.5px;
+  margin-bottom: 13.3px;
+}

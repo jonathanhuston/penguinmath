@@ -9,7 +9,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
 import Html.Events.Extra exposing (onEnter)
-import Http
+import Http 
 import Json.Decode exposing (Decoder, at, array, list, int, string, succeed)
 import Json.Decode.Pipeline exposing (required)
 
@@ -121,6 +121,22 @@ fetchQuizHeaders =
     Http.get
         { url = baseUrl ++ "quizzes"
         , expect = Http.expectJson LoadQuizHeaders headersDecoder
+        } 
+
+
+fetchDefault : Cmd Msg
+fetchDefault =
+    Http.get
+        { url = baseUrl ++ "quiz"
+        , expect = Http.expectJson LoadQuiz quizDecoder
+        }
+
+
+fetchQuiz : Model -> String -> Cmd Msg
+fetchQuiz model name =
+    Http.get
+        { url = baseUrl ++ "quizzes/" ++ name
+        , expect = Http.expectJson LoadQuiz quizDecoder
         }
 
 
@@ -227,29 +243,29 @@ getNextPage model =
         { model | page = SadPengi }
 
 
-fetchQuiz : Model -> String -> Cmd Msg
-fetchQuiz model name =
-    Http.get
-        { url = baseUrl ++ "quizzes/" ++ name
-        , expect = Http.expectJson LoadQuiz quizDecoder
-        }
-
-
 -- VIEW
 
 view : Model -> Html Msg
 view model =
     div [ id "content" ]
         [ h1 [] [ text "Penguin Math" ]
+        , displayHeader model
         , displayCaption model
         , displayButton model
         , section [ id "pengi" , class "container"]
-            [ viewPengi model ]
+            [ displayPengi model ]
         , p [] [ text ("Right: " ++ String.fromInt model.right) ]
         , p [] [ text ("Wrong: " ++ String.fromInt model.wrong) ]
         , p [] [ text ("Questions left: " ++ String.fromInt (model.quiz.total - model.right - model.wrong)) ]
         ]
 
+
+displayHeader : Model -> Html Msg
+displayHeader model =
+    if model.page == Intro then 
+        h2 [] [ text "(and other quizzes)"]
+    else
+        h2 [] [ text model.quiz.title ]
 
 displayCaption : Model -> Html Msg
 displayCaption model =
@@ -262,7 +278,7 @@ displayCaption model =
     in
     case model.page of
         Intro ->
-            p [] [ text "Hi, I'm Pengi the Penguin. Let's do some math. "]
+            p [] [ text "Hi, I'm Pengi the Penguin. First, choose a quiz. "]
         AskQuestion ->    
             p [] [ text question ]
         RightAnswer ->
@@ -301,8 +317,8 @@ displayDropdown model =
    List.map (\qz -> option [ value qz.name ] [ text qz.title ]) model.quizHeaders
 
 
-viewPengi : Model -> Html Msg
-viewPengi model =
+displayPengi : Model -> Html Msg
+displayPengi model =
     let pengiImg = img [ src "resources/pengi.png"
                        , height 130 
                        ] []

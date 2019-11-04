@@ -124,14 +124,6 @@ fetchQuizHeaders =
         } 
 
 
-fetchDefault : Cmd Msg
-fetchDefault =
-    Http.get
-        { url = baseUrl ++ "quiz"
-        , expect = Http.expectJson LoadQuiz quizDecoder
-        }
-
-
 fetchQuiz : Model -> String -> Cmd Msg
 fetchQuiz model name =
     Http.get
@@ -149,7 +141,8 @@ init () =
 -- UPDATE
 
 type Msg 
-    = Input String
+    = Go
+    | Input String
     | Enter
     | Next
     | StartOver
@@ -161,6 +154,11 @@ type Msg
 update : Msg -> Model -> ( Model, Cmd Msg)
 update msg model =
     case msg of
+        Go ->
+            ( { model | page = AskQuestion
+              , myAnswer = "" }
+            , fetchQuiz model model.quiz.name
+            )
         Input myAnswer ->
             ( { model | myAnswer = myAnswer }
             , Cmd.none
@@ -184,7 +182,17 @@ update msg model =
             , fetchQuizHeaders
             )
         LoadQuizHeaders (Ok quizHeaders) ->
-            ( { model | quizHeaders = quizHeaders }
+            let quizName = case List.head quizHeaders of
+                            Just qh ->
+                                qh.name
+                            Nothing ->
+                                ""
+                oldQuiz = model.quiz
+                newQuiz = { oldQuiz | name = quizName
+                          , total = 0 }
+            in  
+            ( { model | quizHeaders = quizHeaders
+              , quiz = newQuiz }
             , Cmd.none 
             )
         LoadQuizHeaders (Err _) ->
@@ -192,8 +200,12 @@ update msg model =
             , Cmd.none
             )
         SelectQuiz quizName ->
-            ( model
-            , fetchQuiz model quizName
+            let
+                oldQuiz = model.quiz
+                newQuiz = { oldQuiz | name = quizName }
+            in
+            ( { model | quiz = newQuiz }
+            , Cmd.none
             )
         LoadQuiz (Ok quiz) ->
             ( { model | quiz = quiz }
@@ -298,7 +310,7 @@ displayButton model =
             section [ id "select quiz" ]
                 [ select [ class "dropbtn", name "quizzes", onInput SelectQuiz ]
                     (displayDropdown model)
-                , button [ onClick Next ] [ text "Go" ]
+                , button [ onClick Go ] [ text "Go" ]
                 ]
         AskQuestion ->
             input [ value model.myAnswer, onInput Input, onEnter Enter ] []

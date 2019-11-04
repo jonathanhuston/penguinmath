@@ -5977,6 +5977,7 @@ var elm$core$Platform$Sub$none = elm$core$Platform$Sub$batch(_List_Nil);
 var author$project$PenguinMath$subscriptions = function (model) {
 	return elm$core$Platform$Sub$none;
 };
+var author$project$PenguinMath$AskQuestion = {$: 'AskQuestion'};
 var author$project$PenguinMath$LoadQuiz = function (a) {
 	return {$: 'LoadQuiz', a: a};
 };
@@ -6019,7 +6020,6 @@ var author$project$PenguinMath$fetchQuiz = F2(
 				url: author$project$PenguinMath$baseUrl + ('quizzes/' + name)
 			});
 	});
-var author$project$PenguinMath$AskQuestion = {$: 'AskQuestion'};
 var author$project$PenguinMath$HappyPengi = {$: 'HappyPengi'};
 var author$project$PenguinMath$SadPengi = {$: 'SadPengi'};
 var elm$core$Basics$ge = _Utils_ge;
@@ -6095,11 +6095,26 @@ var author$project$PenguinMath$rightOrWrong = function (model) {
 		model,
 		{lastWrong: true, page: author$project$PenguinMath$WrongAnswer, wrong: model.wrong + 1}));
 };
+var elm$core$List$head = function (list) {
+	if (list.b) {
+		var x = list.a;
+		var xs = list.b;
+		return elm$core$Maybe$Just(x);
+	} else {
+		return elm$core$Maybe$Nothing;
+	}
+};
 var elm$core$Platform$Cmd$batch = _Platform_batch;
 var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
 var author$project$PenguinMath$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
+			case 'Go':
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{myAnswer: '', page: author$project$PenguinMath$AskQuestion}),
+					A2(author$project$PenguinMath$fetchQuiz, model, model.quiz.name));
 			case 'Input':
 				var myAnswer = msg.a;
 				return _Utils_Tuple2(
@@ -6124,19 +6139,38 @@ var author$project$PenguinMath$update = F2(
 			case 'LoadQuizHeaders':
 				if (msg.a.$ === 'Ok') {
 					var quizHeaders = msg.a.a;
+					var quizName = function () {
+						var _n1 = elm$core$List$head(quizHeaders);
+						if (_n1.$ === 'Just') {
+							var qh = _n1.a;
+							return qh.name;
+						} else {
+							return '';
+						}
+					}();
+					var oldQuiz = model.quiz;
+					var newQuiz = _Utils_update(
+						oldQuiz,
+						{name: quizName, total: 0});
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{quizHeaders: quizHeaders}),
+							{quiz: newQuiz, quizHeaders: quizHeaders}),
 						elm$core$Platform$Cmd$none);
 				} else {
 					return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
 				}
 			case 'SelectQuiz':
 				var quizName = msg.a;
+				var oldQuiz = model.quiz;
+				var newQuiz = _Utils_update(
+					oldQuiz,
+					{name: quizName});
 				return _Utils_Tuple2(
-					model,
-					A2(author$project$PenguinMath$fetchQuiz, model, quizName));
+					_Utils_update(
+						model,
+						{quiz: newQuiz}),
+					elm$core$Platform$Cmd$none);
 			default:
 				if (msg.a.$ === 'Ok') {
 					var quiz = msg.a.a;
@@ -6151,6 +6185,7 @@ var author$project$PenguinMath$update = F2(
 		}
 	});
 var author$project$PenguinMath$Enter = {$: 'Enter'};
+var author$project$PenguinMath$Go = {$: 'Go'};
 var author$project$PenguinMath$Input = function (a) {
 	return {$: 'Input', a: a};
 };
@@ -6306,7 +6341,7 @@ var author$project$PenguinMath$displayButton = function (model) {
 						elm$html$Html$button,
 						_List_fromArray(
 							[
-								elm$html$Html$Events$onClick(author$project$PenguinMath$Next)
+								elm$html$Html$Events$onClick(author$project$PenguinMath$Go)
 							]),
 						_List_fromArray(
 							[

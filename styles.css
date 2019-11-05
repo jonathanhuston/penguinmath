@@ -32,6 +32,10 @@ h2 {
   font-size: 18px
 }
 
+#wrong {
+  color : red;
+}
+
 .dropbtn {
   background-color: #898ec1;
   font-family: 'Montserrat', sans-serif;

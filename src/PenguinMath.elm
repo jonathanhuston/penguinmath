@@ -49,6 +49,7 @@ type Page
     | AskQuestion
     | RightAnswer
     | WrongAnswer
+    | WrongTwice
     | SadPengi
     | HappyPengi
 
@@ -59,6 +60,8 @@ type alias Model =
     , right : Int
     , wrong : Int
     , count : Int
+    , question : String
+    , answer : String
     , myAnswer : String
     , lastWrong : Bool
     }
@@ -89,8 +92,8 @@ quizDecoder =
 
 baseUrl : String
 baseUrl =
---    "https://slatescript.pythonanywhere.com/penguinmath/api/"
-    "http://localhost:5000/penguinmath/api/"
+    "https://slatescript.pythonanywhere.com/penguinmath/api/"
+--    "http://localhost:5000/penguinmath/api/"
 
 
 initialModel : Model
@@ -111,6 +114,8 @@ initialModel =
     , right = 0
     , wrong = 0
     , count = 0
+    , question = ""
+    , answer = ""
     , myAnswer = ""
     , lastWrong = False
     }
@@ -156,7 +161,8 @@ update msg model =
     case msg of
         Go ->
             ( { model | page = AskQuestion
-              , myAnswer = "" }
+              , myAnswer = "" 
+              }
             , fetchQuiz model model.quiz.name
             )
         Input myAnswer ->
@@ -176,6 +182,8 @@ update msg model =
               , right = 0
               , wrong = 0
               , count = 0
+              , question = ""
+              , answer = ""
               , myAnswer = ""
               , lastWrong = False
               }
@@ -189,10 +197,12 @@ update msg model =
                                 ""
                 oldQuiz = model.quiz
                 newQuiz = { oldQuiz | name = quizName
-                          , total = 0 }
+                          , total = 0 
+                          }
             in  
             ( { model | quizHeaders = quizHeaders
-              , quiz = newQuiz }
+              , quiz = newQuiz 
+              }
             , Cmd.none 
             )
         LoadQuizHeaders (Err _) ->
@@ -208,7 +218,10 @@ update msg model =
             , Cmd.none
             )
         LoadQuiz (Ok quiz) ->
-            ( { model | quiz = quiz }
+            ( { model | quiz = quiz
+              , question = getQuestion { model | quiz = quiz }
+              , answer = getAnswer { model | quiz = quiz }
+              }
             , Cmd.none 
             )
         LoadQuiz (Err _) ->
@@ -217,15 +230,27 @@ update msg model =
             )
 
 
+getQuestion : Model -> String
+getQuestion model =
+    case Array.get model.count model.quiz.questions of
+        Just q ->
+            q
+        Nothing ->
+            "I don't know what to ask."
+
+
+getAnswer : Model -> String
+getAnswer model =
+    case Array.get model.count model.quiz.answers of
+        Just a ->
+            a
+        Nothing ->
+            "I have no idea."
+
+
 rightOrWrong : Model -> Model
 rightOrWrong model =
-    let answer = case Array.get model.count model.quiz.answers of
-                    Just a ->
-                        a
-                    Nothing ->
-                        ""
-    in
-    if model.myAnswer == answer then 
+    if model.myAnswer == model.answer then 
         if model.lastWrong then
             { model | page = RightAnswer
             , count = model.count + 1
@@ -236,7 +261,9 @@ rightOrWrong model =
             , count = model.count + 1
             , lastWrong = False } 
     else if model.lastWrong then
-            { model | page = WrongAnswer }
+            { model | page = WrongTwice
+            , count = model.count + 1
+            , lastWrong = False }
         else
             { model | page = WrongAnswer
             , wrong = model.wrong + 1
@@ -247,6 +274,8 @@ getNextPage : Model -> Model
 getNextPage model =
     if model.count < model.quiz.total then
         { model | page = AskQuestion
+        , question = getQuestion model
+        , answer = getAnswer model
         , myAnswer = ""
         }
     else if model.right >= model.quiz.goal then
@@ -276,27 +305,28 @@ displayHeader : Model -> Html Msg
 displayHeader model =
     if model.page == Intro then 
         h2 [] [ text "(and other quizzes)"]
+    else if model.page == WrongTwice then
+        h2 [ id "wrong" ] [ text model.question ]
     else
         h2 [] [ text model.quiz.title ]
 
+
 displayCaption : Model -> Html Msg
 displayCaption model =
-    let question = case Array.get model.count model.quiz.questions of
-                        Just q ->
-                            q
-                        Nothing ->
-                            "I'm at a loss"
+    let 
         score = String.fromInt model.right ++ " out of " ++ String.fromInt model.quiz.total
     in
     case model.page of
         Intro ->
-            p [] [ text "Hi, I'm Pengi the Penguin. First, choose a quiz. "]
+            p [] [ text "Hi, I'm Pengi the Penguin. Let's choose a quiz."]
         AskQuestion ->    
-            p [] [ text question ]
+            p [] [ text model.question ]
         RightAnswer ->
             p [] [ text "That's the right answer!" ]
         WrongAnswer ->
             p [] [ text "Oops. Try again." ]
+        WrongTwice ->
+            p [] [ text ("Double oops. The right answer  is " ++ model.answer ++ ".") ]
         SadPengi ->
             p [] [ text ("You answered " ++ score ++ " correctly. Pengi is a bit sad.") ]
         HappyPengi ->
@@ -315,13 +345,15 @@ displayButton model =
         AskQuestion ->
             input [ value model.myAnswer, onInput Input, onEnter Enter ] []
         RightAnswer ->
-            button [ onClick Next ] [ text "Next" ]
+            button [ onClick Next ] [ text "Next question" ]
         WrongAnswer ->
             button [ onClick Next ] [ text "Try again" ]
+        WrongTwice ->
+            button [ onClick Next ] [ text "Next question"]
         SadPengi ->
-            button [ onClick StartOver ] [ text "Start over" ]
+            button [ onClick StartOver ] [ text "New quiz" ]
         HappyPengi ->
-            button [ onClick StartOver ] [ text "Start over" ]
+            button [ onClick StartOver ] [ text "New quiz" ]
 
 
 displayDropdown : Model -> List (Html Msg)
@@ -342,20 +374,10 @@ displayPengi model =
                          , controls False 
                          ] []
     in
-    case model.page of 
-        Intro ->
-            pengiImg
-        AskQuestion ->
-            pengiImg        
-        RightAnswer ->
-            pengiImg        
-        WrongAnswer ->
-            pengiImg        
-        SadPengi ->
-            pengiImg
-        HappyPengi ->
-            pengiVid
-
+    if model.page == HappyPengi then
+        pengiVid
+    else
+        pengiImg
 
 
 -- SUBSCRIPTIONS

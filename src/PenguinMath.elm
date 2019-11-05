@@ -92,8 +92,8 @@ quizDecoder =
 
 baseUrl : String
 baseUrl =
---    "https://slatescript.pythonanywhere.com/penguinmath/api/"
-    "http://localhost:5000/penguinmath/api/"
+    "https://slatescript.pythonanywhere.com/penguinmath/api/"
+--    "http://localhost:5000/penguinmath/api/"
 
 
 initialModel : Model
@@ -367,6 +367,10 @@ displayPengi model =
                        , height 130 
                        ] []
 
+        deadImg = img [ src "resources/dead penguin.png"
+                      , height 130
+                      ] []
+
         pengiVid = video [ src "resources/pengi.mov"
                          , height 150
                          , autoplay True
@@ -376,6 +380,8 @@ displayPengi model =
     in
     if model.page == HappyPengi then
         pengiVid
+    else if model.page == SadPengi then
+        deadImg
     else
         pengiImg
 

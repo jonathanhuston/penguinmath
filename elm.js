@@ -5967,7 +5967,7 @@ var author$project$PenguinMath$initialModel = function () {
 		T: '',
 		L: 0
 	};
-	return {y: '', i: 0, o: false, u: '', f: 0, C: '', e: emptyQuiz, W: _List_Nil, q: 0, E: 0};
+	return {y: '', i: 0, o: false, u: '', e: 0, C: '', f: emptyQuiz, W: _List_Nil, q: 0, E: 0};
 }();
 var author$project$PenguinMath$init = function (_n0) {
 	return _Utils_Tuple2(author$project$PenguinMath$initialModel, author$project$PenguinMath$fetchQuizHeaders);
@@ -6063,7 +6063,7 @@ var elm$core$Array$get = F2(
 			A3(elm$core$Array$getHelp, startShift, index, tree)));
 	});
 var author$project$PenguinMath$getAnswer = function (model) {
-	var _n0 = A2(elm$core$Array$get, model.i, model.e.Z);
+	var _n0 = A2(elm$core$Array$get, model.i, model.f.Z);
 	if (!_n0.$) {
 		var a = _n0.a;
 		return a;
@@ -6074,7 +6074,7 @@ var author$project$PenguinMath$getAnswer = function (model) {
 var author$project$PenguinMath$HappyPengi = 6;
 var author$project$PenguinMath$SadPengi = 5;
 var author$project$PenguinMath$getQuestion = function (model) {
-	var _n0 = A2(elm$core$Array$get, model.i, model.e.ad);
+	var _n0 = A2(elm$core$Array$get, model.i, model.f.ad);
 	if (!_n0.$) {
 		var q = _n0.a;
 		return q;
@@ -6083,18 +6083,18 @@ var author$project$PenguinMath$getQuestion = function (model) {
 	}
 };
 var author$project$PenguinMath$getNextPage = function (model) {
-	return (_Utils_cmp(model.i, model.e.L) < 0) ? _Utils_update(
+	return (_Utils_cmp(model.i, model.f.L) < 0) ? _Utils_update(
 		model,
 		{
 			y: author$project$PenguinMath$getAnswer(model),
 			u: '',
-			f: 1,
+			e: 1,
 			C: author$project$PenguinMath$getQuestion(model)
-		}) : ((_Utils_cmp(model.q, model.e._) > -1) ? _Utils_update(
+		}) : ((_Utils_cmp(model.q, model.f._) > -1) ? _Utils_update(
 		model,
-		{f: 6}) : _Utils_update(
+		{e: 6}) : _Utils_update(
 		model,
-		{f: 5}));
+		{e: 5}));
 };
 var author$project$PenguinMath$RightAnswer = 2;
 var author$project$PenguinMath$WrongAnswer = 3;
@@ -6102,13 +6102,13 @@ var author$project$PenguinMath$WrongTwice = 4;
 var author$project$PenguinMath$rightOrWrong = function (model) {
 	return _Utils_eq(model.u, model.y) ? (model.o ? _Utils_update(
 		model,
-		{i: model.i + 1, o: false, f: 2}) : _Utils_update(
+		{i: model.i + 1, o: false, e: 2}) : _Utils_update(
 		model,
-		{i: model.i + 1, o: false, f: 2, q: model.q + 1})) : (model.o ? _Utils_update(
+		{i: model.i + 1, o: false, e: 2, q: model.q + 1})) : (model.o ? _Utils_update(
 		model,
-		{i: model.i + 1, o: false, f: 4}) : _Utils_update(
+		{i: model.i + 1, o: false, e: 4}) : _Utils_update(
 		model,
-		{o: true, f: 3, E: model.E + 1}));
+		{o: true, e: 3, E: model.E + 1}));
 };
 var elm$core$List$head = function (list) {
 	if (list.b) {
@@ -6128,8 +6128,8 @@ var author$project$PenguinMath$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{u: '', f: 1}),
-					A2(author$project$PenguinMath$fetchQuiz, model, model.e.v));
+						{u: '', e: 1}),
+					A2(author$project$PenguinMath$fetchQuiz, model, model.f.v));
 			case 1:
 				var myAnswer = msg.a;
 				return _Utils_Tuple2(
@@ -6149,7 +6149,7 @@ var author$project$PenguinMath$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{y: '', i: 0, o: false, u: '', f: 0, C: '', q: 0, E: 0}),
+						{y: '', i: 0, o: false, u: '', e: 0, C: '', q: 0, E: 0}),
 					author$project$PenguinMath$fetchQuizHeaders);
 			case 5:
 				if (!msg.a.$) {
@@ -6163,28 +6163,28 @@ var author$project$PenguinMath$update = F2(
 							return '';
 						}
 					}();
-					var oldQuiz = model.e;
+					var oldQuiz = model.f;
 					var newQuiz = _Utils_update(
 						oldQuiz,
 						{v: quizName, L: 0});
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{e: newQuiz, W: quizHeaders}),
+							{f: newQuiz, W: quizHeaders}),
 						elm$core$Platform$Cmd$none);
 				} else {
 					return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
 				}
 			case 6:
 				var quizName = msg.a;
-				var oldQuiz = model.e;
+				var oldQuiz = model.f;
 				var newQuiz = _Utils_update(
 					oldQuiz,
 					{v: quizName});
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{e: newQuiz}),
+						{f: newQuiz}),
 					elm$core$Platform$Cmd$none);
 			default:
 				if (!msg.a.$) {
@@ -6196,12 +6196,12 @@ var author$project$PenguinMath$update = F2(
 								y: author$project$PenguinMath$getAnswer(
 									_Utils_update(
 										model,
-										{e: quiz})),
+										{f: quiz})),
 								C: author$project$PenguinMath$getQuestion(
 									_Utils_update(
 										model,
-										{e: quiz})),
-								e: quiz
+										{f: quiz})),
+								f: quiz
 							}),
 						elm$core$Platform$Cmd$none);
 				} else {
@@ -6342,7 +6342,7 @@ var elm_community$html_extra$Html$Events$Extra$onEnter = function (onEnterAction
 			elm$html$Html$Events$keyCode));
 };
 var author$project$PenguinMath$displayButton = function (model) {
-	var _n0 = model.f;
+	var _n0 = model.e;
 	switch (_n0) {
 		case 0:
 			return A2(
@@ -6442,8 +6442,8 @@ var author$project$PenguinMath$displayButton = function (model) {
 };
 var elm$html$Html$p = _VirtualDom_node('p');
 var author$project$PenguinMath$displayCaption = function (model) {
-	var score = elm$core$String$fromInt(model.q) + (' out of ' + elm$core$String$fromInt(model.e.L));
-	var _n0 = model.f;
+	var score = elm$core$String$fromInt(model.q) + (' out of ' + elm$core$String$fromInt(model.f.L));
+	var _n0 = model.e;
 	switch (_n0) {
 		case 0:
 			return A2(
@@ -6505,13 +6505,13 @@ var author$project$PenguinMath$displayCaption = function (model) {
 };
 var elm$html$Html$h2 = _VirtualDom_node('h2');
 var author$project$PenguinMath$displayHeader = function (model) {
-	return (!model.f) ? A2(
+	return (!model.e) ? A2(
 		elm$html$Html$h2,
 		_List_Nil,
 		_List_fromArray(
 			[
 				elm$html$Html$text('(and other quizzes)')
-			])) : ((model.f === 4) ? A2(
+			])) : ((model.e === 4) ? A2(
 		elm$html$Html$h2,
 		_List_fromArray(
 			[
@@ -6525,7 +6525,7 @@ var author$project$PenguinMath$displayHeader = function (model) {
 		_List_Nil,
 		_List_fromArray(
 			[
-				elm$html$Html$text(model.e.T)
+				elm$html$Html$text(model.f.T)
 			])));
 };
 var elm$html$Html$img = _VirtualDom_node('img');
@@ -6573,7 +6573,15 @@ var author$project$PenguinMath$displayPengi = function (model) {
 				elm$html$Html$Attributes$height(130)
 			]),
 		_List_Nil);
-	return (model.f === 6) ? pengiVid : pengiImg;
+	var deadImg = A2(
+		elm$html$Html$img,
+		_List_fromArray(
+			[
+				elm$html$Html$Attributes$src('resources/dead penguin.png'),
+				elm$html$Html$Attributes$height(130)
+			]),
+		_List_Nil);
+	return (model.e === 6) ? pengiVid : ((model.e === 5) ? deadImg : pengiImg);
 };
 var elm$html$Html$div = _VirtualDom_node('div');
 var elm$html$Html$h1 = _VirtualDom_node('h1');
@@ -6629,7 +6637,7 @@ var author$project$PenguinMath$view = function (model) {
 				_List_fromArray(
 					[
 						elm$html$Html$text(
-						'Questions left: ' + elm$core$String$fromInt((model.e.L - model.q) - model.E))
+						'Questions left: ' + elm$core$String$fromInt((model.f.L - model.q) - model.E))
 					]))
 			]));
 };

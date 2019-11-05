@@ -345,11 +345,11 @@ displayButton model =
         AskQuestion ->
             input [ value model.myAnswer, onInput Input, onEnter Enter ] []
         RightAnswer ->
-            button [ onClick Next ] [ text "Next question" ]
+            button [ onClick Next ] [ text "Next" ]
         WrongAnswer ->
             button [ onClick Next ] [ text "Try again" ]
         WrongTwice ->
-            button [ onClick Next ] [ text "Next question"]
+            button [ onClick Next ] [ text "Next"]
         SadPengi ->
             button [ onClick StartOver ] [ text "New quiz" ]
         HappyPengi ->

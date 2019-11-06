@@ -6099,8 +6099,11 @@ var author$project$PenguinMath$getNextPage = function (model) {
 var author$project$PenguinMath$RightAnswer = 2;
 var author$project$PenguinMath$WrongAnswer = 3;
 var author$project$PenguinMath$WrongTwice = 4;
+var elm$core$String$trim = _String_trim;
 var author$project$PenguinMath$rightOrWrong = function (model) {
-	return _Utils_eq(model.u, model.y) ? (model.o ? _Utils_update(
+	return _Utils_eq(
+		elm$core$String$trim(model.u),
+		model.y) ? (model.o ? _Utils_update(
 		model,
 		{i: model.i + 1, o: false, e: 2}) : _Utils_update(
 		model,
@@ -6392,7 +6395,7 @@ var author$project$PenguinMath$displayButton = function (model) {
 					]),
 				_List_fromArray(
 					[
-						elm$html$Html$text('Next question')
+						elm$html$Html$text('Next')
 					]));
 		case 3:
 			return A2(
@@ -6414,7 +6417,7 @@ var author$project$PenguinMath$displayButton = function (model) {
 					]),
 				_List_fromArray(
 					[
-						elm$html$Html$text('Next question')
+						elm$html$Html$text('Next')
 					]));
 		case 5:
 			return A2(
@@ -6530,6 +6533,14 @@ var author$project$PenguinMath$displayHeader = function (model) {
 };
 var elm$html$Html$img = _VirtualDom_node('img');
 var elm$html$Html$video = _VirtualDom_node('video');
+var elm$virtual_dom$VirtualDom$attribute = F2(
+	function (key, value) {
+		return A2(
+			_VirtualDom_attribute,
+			_VirtualDom_noOnOrFormAction(key),
+			_VirtualDom_noJavaScriptOrHtmlUri(value));
+	});
+var elm$html$Html$Attributes$attribute = elm$virtual_dom$VirtualDom$attribute;
 var elm$json$Json$Encode$bool = _Json_wrap;
 var elm$html$Html$Attributes$boolProperty = F2(
 	function (key, bool) {
@@ -6561,6 +6572,7 @@ var author$project$PenguinMath$displayPengi = function (model) {
 				elm$html$Html$Attributes$src('resources/pengi.mov'),
 				elm$html$Html$Attributes$height(150),
 				elm$html$Html$Attributes$autoplay(true),
+				A2(elm$html$Html$Attributes$attribute, 'playsinline', 'playsinline'),
 				elm$html$Html$Attributes$loop(true),
 				elm$html$Html$Attributes$controls(false)
 			]),

@@ -250,7 +250,7 @@ getAnswer model =
 
 rightOrWrong : Model -> Model
 rightOrWrong model =
-    if model.myAnswer == model.answer then 
+    if String.trim model.myAnswer == model.answer then 
         if model.lastWrong then
             { model | page = RightAnswer
             , count = model.count + 1
@@ -374,6 +374,7 @@ displayPengi model =
         pengiVid = video [ src "resources/pengi.mov"
                          , height 150
                          , autoplay True
+                         , attribute "playsinline" "playsinline"
                          , loop True
                          , controls False 
                          ] []

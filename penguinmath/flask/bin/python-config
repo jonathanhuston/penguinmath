@@ -1,4 +1,4 @@
-#!/Users/jonathanhuston/Documents/Web/Heroku/penguinmath/flask/bin/python
+#!/Users/jonathanhuston/Documents/Web/Neocities/PenguinMath/penguinmath/flask/bin/python
 
 import sys
 import getopt

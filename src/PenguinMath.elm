@@ -92,7 +92,6 @@ quizDecoder =
 
 baseUrl : String
 baseUrl =
---    "https://penguinmath.herokuapp.com/penguinmath/api/"
     "https://slatescript.pythonanywhere.com/penguinmath/api/"
 --    "http://localhost:5000/penguinmath/api/"
 

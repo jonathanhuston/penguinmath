@@ -4525,7 +4525,7 @@ function _Browser_load(url)
 var author$project$PenguinMath$LoadQuizHeaders = function (a) {
 	return {$: 5, a: a};
 };
-var author$project$PenguinMath$baseUrl = 'https://slatescript.pythonanywhere.com/penguinmath/api/';
+var author$project$PenguinMath$baseUrl = 'https://penguinmath.herokuapp.com/penguinmath/api/';
 var elm$core$Basics$apR = F2(
 	function (x, f) {
 		return f(x);

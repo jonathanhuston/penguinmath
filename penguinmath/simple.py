@@ -2,7 +2,7 @@ import csv
 import random
 
 
-def generate_qas(total, quiz_name):
+def generate_qas(_, total, quiz_name):
     quiz_file = open('quizdata/' + quiz_name + '.csv')
     quiz_reader = csv.reader(quiz_file)
     qas = list(quiz_reader)

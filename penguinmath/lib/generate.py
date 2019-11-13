@@ -1,4 +1,4 @@
-import addition, measures, simple, times
+from lib import addition, measures, simple, times
 
 quizzes = [
     {

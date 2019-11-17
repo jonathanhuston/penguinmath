@@ -3,6 +3,7 @@ import random
 
 
 def generate_qas(_, total, quiz_name):
+    # PythonAnywhere: quiz_file = open('penguinmath/quizdata/' + quiz_name + '.csv')
     quiz_file = open('quizdata/' + quiz_name + '.csv')
     quiz_reader = csv.reader(quiz_file)
     qas = list(quiz_reader)

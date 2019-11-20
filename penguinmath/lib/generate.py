@@ -2,6 +2,10 @@ from lib import addition, measures, simple, times
 
 quizzes = [
     {
+        "name": "time-simple",
+        "title": "Simple time"
+    }, 
+    {
         "name": "measures",
         "title": "Measures (length, volume, weight)"
     },
@@ -46,6 +50,7 @@ def make_quiz(quiz, generate_qas, get_qa, total, goal, extra):
 
 def get_quiz(quiz=quizzes[0]):
     dispatch = {
+        "time-simple": {"generate_qas": simple.generate_qas, "get_qa": None, "total": 21, "goal": 20, "extra": "time-simple"},
         "measures": {"generate_qas": generate_qas, "get_qa": measures.get_qa, "total": 10, "goal": 8, "extra": 1000},
         "times1000": {"generate_qas": generate_qas, "get_qa": times.get_qa, "total": 25, "goal": 23, "extra": 1000},
         "times100": {"generate_qas": generate_qas, "get_qa": times.get_qa, "total": 25, "goal": 23, "extra": 100},

@@ -54,7 +54,7 @@ def make_quiz(quiz, generate_qas, get_qa, total, goal, extra):
 
 def get_quiz(quiz=quizzes[0]):
     dispatch = {
-        "time": {"generate_qas": generate_qas, "get_qa": time.get_qa, "total": 20, "goal": 19, "extra": None},
+        "time_dhms": {"generate_qas": generate_qas, "get_qa": time_dhms.get_qa, "total": 20, "goal": 19, "extra": None},
         "measures": {"generate_qas": generate_qas, "get_qa": measures.get_qa, "total": 10, "goal": 9, "extra": 1000},
         "times1000000": {"generate_qas": generate_qas, "get_qa": times.get_qa, "total": 10, "goal": 9, "extra": 1000000},
         "times1000": {"generate_qas": generate_qas, "get_qa": times.get_qa, "total": 25, "goal": 23, "extra": 1000},

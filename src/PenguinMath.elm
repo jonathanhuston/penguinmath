@@ -92,8 +92,8 @@ quizDecoder =
 
 baseUrl : String
 baseUrl =
---    "https://slatescript.pythonanywhere.com/penguinmath/api/"
-    "http://localhost:5000/penguinmath/api/"
+    "https://slatescript.pythonanywhere.com/penguinmath/api/"
+--    "http://localhost:5000/penguinmath/api/"
 
 
 initialModel : Model

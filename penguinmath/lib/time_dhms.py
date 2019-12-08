@@ -13,7 +13,7 @@ def up_qa(i):
     source_unit = units[i]
     target_unit = units[i-1]
     q = "How many {} and {} are {} {}?".format(target_unit, source_unit, str(quantity), source_unit)
-    a = "{} {} and {} {}".format(str(quantity // multiple), target_unit, str(quantity % multiple), source_unit)
+    a = "{} {} {} {}".format(str(quantity // multiple), target_unit, str(quantity % multiple), source_unit)
 
     return q, a
 
@@ -24,7 +24,7 @@ def down_qa(i):
     source_unit = units[i]
     target_unit = units[i+1]
     q = "How many {} are {} {}?".format(target_unit, str(quantity), source_unit)
-    a = "{} {}".format(str(quantity * multiple), target_unit)
+    a = str(quantity * multiple)
 
     return q, a
 

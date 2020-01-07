@@ -1,6 +1,10 @@
-from lib import addition, measures, simple, time_dhms, times
+from lib import weights, addition, measures, simple, time_dhms, times
 
 quizzes = [
+    {
+        "name": "weights",
+        "title": "Weights (kg, g, mg)"
+    }, 
     {
         "name": "time_dhms",
         "title": "Time (days, hours, minutes, seconds)"
@@ -54,6 +58,7 @@ def make_quiz(quiz, generate_qas, get_qa, total, goal, extra):
 
 def get_quiz(quiz=quizzes[0]):
     dispatch = {
+        "weights": {"generate_qas": generate_qas, "get_qa": weights.get_qa, "total": 10, "goal": 9, "extra": 1000},
         "time_dhms": {"generate_qas": generate_qas, "get_qa": time_dhms.get_qa, "total": 20, "goal": 19, "extra": None},
         "measures": {"generate_qas": generate_qas, "get_qa": measures.get_qa, "total": 10, "goal": 9, "extra": 1000},
         "times1000000": {"generate_qas": generate_qas, "get_qa": times.get_qa, "total": 10, "goal": 9, "extra": 1000000},

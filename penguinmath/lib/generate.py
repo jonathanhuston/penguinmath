@@ -3,11 +3,11 @@ from lib import volumes, weights, addition, measures, simple, time_dhms, times
 quizzes = [
     {
         "name": "volumes",
-        "title": "Volumes (l, dl, cl, ml)"
+        "title": "Volumes (hl, l, dl, cl, ml)"
     }, 
     {
         "name": "weights",
-        "title": "Weights (kg, g, mg)"
+        "title": "Weights (t, kg, g, mg)"
     }, 
     {
         "name": "time_dhms",

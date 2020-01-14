@@ -1,9 +1,9 @@
-# weights (kg, g, mg)
+# weights (t, kg, g, mg)
 
 import random
 
-multiples = [["mg", "g", "kg"]]
-values = [[0.001, 1, 1000]]
+multiples = [["mg", "g", "kg", "t"]]
+values = [[0.001, 1, 1000, 1000000]]
 
 
 def get_qa(num_range):

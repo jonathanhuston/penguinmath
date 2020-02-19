@@ -1,2 +1,7 @@
-penguinmath/lib/__pycache__/
+elm-stuff
+node_modules
 penguinmath/flask/
+penguinmath/lib/__pycache__/
+elm.js
+elm.json
+Icon?

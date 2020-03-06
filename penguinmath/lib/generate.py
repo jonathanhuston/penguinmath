@@ -1,6 +1,14 @@
-from lib import volumes, weights, addition, measures, simple, time_dhms, times
+from lib import volumes, weights, addition, measures, simple, time_dhms, times, division
 
 quizzes = [
+    {
+        "name": "times1000",
+        "title": "Times tables (up to 1000)"
+    },
+    {
+        "name": "division1000",
+        "title": "Division (up to 1000)"
+    },
     {
         "name": "volumes",
         "title": "Volumes (hl, l, dl, cl, ml)"
@@ -20,10 +28,6 @@ quizzes = [
     {
         "name": "times1000000",
         "title": "Times tables (up to 1000000)"
-    },
-    {
-        "name": "times1000",
-        "title": "Times tables (up to 1000)"
     },
     {
         "name": "times100",
@@ -69,6 +73,7 @@ def get_quiz(quiz=quizzes[0]):
         "times1000000": {"generate_qas": generate_qas, "get_qa": times.get_qa, "total": 10, "goal": 9, "extra": 1000000},
         "times1000": {"generate_qas": generate_qas, "get_qa": times.get_qa, "total": 25, "goal": 23, "extra": 1000},
         "times100": {"generate_qas": generate_qas, "get_qa": times.get_qa, "total": 25, "goal": 23, "extra": 100},
+        "division1000": {"generate_qas": generate_qas, "get_qa": division.get_qa, "total": 25, "goal": 23, "extra": 1000},
         "capitals": {"generate_qas": simple.generate_qas, "get_qa": None, "total": 40, "goal": 38, "extra": "capitals"},
         "roman": {"generate_qas": simple.generate_qas, "get_qa": None, "total": 14, "goal": 13, "extra": "roman"},
         "addition100000": {"generate_qas": generate_qas, "get_qa": addition.get_qa, "total": 10, "goal": 9, "extra": 100000}

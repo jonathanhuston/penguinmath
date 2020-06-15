@@ -91,9 +91,7 @@ quizDecoder =
 
 
 baseUrl : String
-baseUrl =
-    "https://slatescript.pythonanywhere.com/penguinmath/api/"
---    "http://localhost:5000/penguinmath/api/"
+baseUrl = "/penguinmath/api/"
 
 
 initialModel : Model
@@ -363,15 +361,15 @@ displayDropdown model =
 
 displayPengi : Model -> Html Msg
 displayPengi model =
-    let pengiImg = img [ src "resources/pengi.png"
+    let pengiImg = img [ src "/static/resources/pengi.png"
                        , height 130 
                        ] []
 
-        deadImg = img [ src "resources/dead penguin.png"
+        deadImg = img [ src "/static/resources/dead penguin.png"
                       , height 130
                       ] []
 
-        pengiVid = video [ src "resources/pengi.mov"
+        pengiVid = video [ src "/static/resources/pengi.mov"
                          , height 150
                          , autoplay True
                          , attribute "playsinline" "playsinline"

@@ -2,5 +2,5 @@
 
 Simple math (and other) quiz training program using Elm and Python (Flask)
 
-https://jonathanhuston.org/penguinmath
+<a href="https://jonathanhuston.org/penguinmath">jonathanhuston.org/penguinmath</a>
 

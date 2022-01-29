@@ -2,6 +2,10 @@ from lib import volumes, weights, addition, measures, simple, time_dhms, times, 
 
 quizzes = [
     {
+        "name": "french",
+        "title": "French vocabulary"
+    },
+    {
         "name": "long_division",
         "title": "Long division"
     }, 
@@ -52,10 +56,6 @@ quizzes = [
     {
         "name": "addition100000",
         "title": "Addition (up to 100000)"
-    },
-    {
-        "name": "french",
-        "title": "French vocabulary"
     }
 ]
 
@@ -93,7 +93,7 @@ def get_quiz(quiz=quizzes[0]):
         "capitals": {"generate_qas": simple.generate_qas, "get_qa": None, "total": 40, "goal": 38, "extra": "capitals"},
         "roman": {"generate_qas": simple.generate_qas, "get_qa": None, "total": 14, "goal": 13, "extra": "roman"},
         "addition100000": {"generate_qas": generate_qas, "get_qa": addition.get_qa, "total": 10, "goal": 9, "extra": 100000},
-        "french": {"generate_qas": simple.generate_qas, "get_qa": None, "total": 8, "goal": 8, "extra": "french"}
+        "french": {"generate_qas": simple.generate_qas, "get_qa": None, "total": 172, "goal": 170, "extra": "french"}
     }
     params = dispatch[quiz["name"]]
     return make_quiz(quiz, params["generate_qas"], params["get_qa"], params["total"], params["goal"], params["extra"])
